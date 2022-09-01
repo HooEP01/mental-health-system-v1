@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\Professional;
 use App\Models\Event;
@@ -11,31 +12,48 @@ use DB;
 
 class EventController extends Controller
 {
-    // professional 
+ 
+    /* 
+    | professional 
+    */
+
+    /*
+    | Own event
+    */
+
     public function view()
     {
-        $events = DB::table('events')
+        $individuals = DB::table('events')
         -> select('events.*')
         -> where('events.professional_id','=',Auth::id())
+        -> where('events.type','=','Individual Counselling')
         -> orderBy('created_at','desc')
-        -> paginate(6);
-
-        return view('professional.event')->with('events',$events);
+        -> get();
+        $groups = DB::table('events')
+        -> select('events.*')
+        -> where('events.professional_id','=',Auth::id())
+        -> where('events.type','!=','Individual Counselling')
+        -> orderBy('created_at','desc')
+        -> get();
+        
+        return view('professional.event')->with('individuals',$individuals)->with('groups', $groups);
+    }
+    
+    public function add($type)
+    {
+        return view('professional.event_add')->with('type', $type);
     }
 
-    public function add()
+    public function create()
     {
         $r = request();
-
-        // image
         $imageName='';
         if($r->file('image')!= ''){
             $image=$r->file('image');
             $image->move('event',$image->getClientOriginalName());
             $imageName=$image->getClientOriginalName();
         }
-
-        $events = Event::create([
+        $event = Event::create([
             'professional_id'=>$r->professional_id,
             'type'=>$r->type,
             'attendance_quantity'=>$r->attendance_quantity,
@@ -44,13 +62,20 @@ class EventController extends Controller
             'title'=>$r->title,
             'description'=>$r->description,
         ]);
-
-        return redirect()->route('professional.event.view');
+        $event_id = $event->id;
+        return redirect()->route('professional.event.schedule.view',['id'=>$event_id]); // return to schedule page
     }
 
     public function edit($id){
         $events=Event::all()->where('id',$id);
-        return view('professional.event_detail')->with('events',$events);
+
+        $schedules = DB::table('schedules')
+        -> select('schedules.*')
+        -> where('schedules.event_id','=', $id)
+        -> orderBy('created_at','desc')
+        -> paginate(6);
+
+        return view('professional.event_detail')->with('events',$events)->with('schedules',$schedules);
     }
 
     public function update()
@@ -80,10 +105,43 @@ class EventController extends Controller
     public function delete($id)
     {
         $r = request();
-
         $events=Event::find($id);
         $events->delete();
-        
         return redirect()->route('professional.event.view');
     }
+
+
+    /*
+    | All event
+    */
+    public function viewAll()
+    {
+        $individuals = DB::table('events')
+        -> select('events.*')
+        -> where('events.type','=','Individual Counselling')
+        -> orderBy('created_at','desc')
+        -> paginate(6);
+        $groups = DB::table('events')
+        -> select('events.*')
+        -> where('events.type','!=','Individual Counselling')
+        -> orderBy('created_at','desc')
+        -> paginate(6);
+        return view('professional.event')->with('individuals',$individuals)->with('groups', $groups);
+    }
+
+    /*
+    | User
+    */
+
+       public function userView()
+       {
+           $events = DB::table('events')
+           -> select('events.*')
+           -> where('events.type','!=',"individual Counselling")
+           -> orderBy('created_at','desc')
+           -> paginate(6);
+           
+           return view('event')->with('events',$events);
+       }
+   
 }
