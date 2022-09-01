@@ -18,7 +18,7 @@ return new class extends Migration
             /*Start foreign key*/
             $table->string('professional_id', 5);
             /*End foreign key*/
-            $table->string('type', 20);
+            $table->string('type', 30);
             $table->string('attendance_quantity', 5);
             $table->string('amount', 10)->default('free');
             $table->string('image', 255)->nullable();

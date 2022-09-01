@@ -8,8 +8,8 @@
 
 <script>
 
-    let schedules = <?php echo json_encode($schedules); ?>;
-
+    let data = <?php echo json_encode($data); ?>;
+    console.log(data);
     for(let i = 0; i < schedules['data'].length; i++){
         /*
         let day = schedules['data'][i]['day'];

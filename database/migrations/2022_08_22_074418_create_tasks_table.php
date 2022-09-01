@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             // start foreign key
             $table->string('event_id', 10);
+            $table->string('appointment_id', 10)->nullable();
             $table->string('content_id', 10)->nullable();
             // end foreign key
             $table->string('title');

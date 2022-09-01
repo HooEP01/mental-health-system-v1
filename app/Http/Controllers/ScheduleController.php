@@ -3,73 +3,77 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Professional;
 use App\Models\Schedule;
+use App\Models\Event;
+use Carbon\Carbon;
 use Session;
 use Auth;
 use DB;
 
 class ScheduleController extends Controller
 {
-    public function view()
-    {
 
+
+    /*
+    | Event's schedule(s) for Group & Individual Event
+    */
+
+    /*
+    | Professional
+    */
+
+    public function view($event_id)
+    {
         $schedules = DB::table('schedules')
         -> select('schedules.*')
-        -> where('schedules.professional_id','=',Auth::id())
+        -> where('schedules.event_id','=', $event_id)
         -> orderBy('created_at','desc')
-        -> paginate(5);
-
-        foreach($schedules as $schedule){
-            $today = $schedule->day;
-            $strToday = "";
-            switch($today){
-                case "0": $strToday = "Monday"; break;
-                case "1": $strToday = "Tuesday"; break;
-                case "2": $strToday = "Wednesday"; break;
-                case "3": $strToday = "Thursday"; break;
-                case "4": $strToday = "Friday"; break;
-                case "5": $strToday = "Saturday"; break;
-                case "6": $strToday = "Sunday"; break;
-            }
-            $schedule->day = $strToday;
-
-            // turn hours to end_time
-            $start_time = $schedule->start_time;
-            $hour = $schedule->hour;
-            $end_time = (int)$start_time + $hour;
-            if($end_time < 10){
-                $schedule->hour = "0" . strval($end_time) . ":00";
-            }
-            $schedule->hour = strval($end_time) . ":00";
-
-        }
-
-
-        // locate at views/professional/schedule.blade.php
-        return view('professional.schedule')->with('schedules', $schedules);
+        -> get();
+        return view('professional.event_schedule')->with('schedules', $schedules);
     }
 
-    public function add()
+    public function create() 
     {
         $r=request();
-
+        $start_datetime = date('Y-m-d H:i:s', strtotime("$r->startAt $r->startTime"));
+        $end_datetime = date('Y-m-d H:i:s', strtotime("$r->endAt $r->endTime"));
         $schedules=Schedule::create([
-            'professional_id'=>$r->professional_id,
+            'event_id'=>$r->event_id,
+            'periodical'=>$r->periodical,
             'day'=>$r->day,
-            'start_date'=>$r->startAt,
-            'end_date'=>$r->endAt,
-            'start_time'=>$r->startTime,
-            'hour'=>$r->hour,
+            'start_datetime'=>$start_datetime,
+            'end_datetime'=>$end_datetime,
         ]);
-
-        return redirect()->route('schedule.view');
+        $event_id = $r->event_id;
+        return redirect()->route('professional.event.schedule.view',['id'=>$event_id]);
     }
 
-    public function delete($id){
-        $schedules=Schedule::find($id);
-        $schedules->delete();
-        
-        return redirect()->route('schedule.view');
+    public function edit($id)
+    {
+        $schedule = Schedule::all->where('id',$id);
+        return view('professional.event.schedule.edit')->with('schedule', $schedule);
+    }
+
+    public function update()
+    {
+        $r = request();
+        $start_datetime = date('Y-m-d H:i:s', strtotime("$r->startAt $r->startTime"));
+        $end_datetime = date('Y-m-d H:i:s', strtotime("$r->endAt $r->endTime"));
+        $schedule=Schedule::find($r->id);
+        $schedule->periodical=$r->periodical;
+        $schedule->day=$r->day;
+        $schedule->start_datetime=$start_datetime;
+        $schedule->end_datetime=$end_datetime;
+        $schedule->save();
+        $event_id = $r->event_id;
+        return redirect()->route('professional.event.schedule.view',['id'=>$event_id]);
+    }
+
+    public function delete($id)
+    {
+        $schedule=Schedule::find($id);
+        $event_id = $schedule->event_id;
+        $schedule->delete();
+        return redirect()->route('professional.event.schedule.view',['id'=>$event_id]);
     }
 }

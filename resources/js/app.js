@@ -15,8 +15,6 @@ import { createApp } from 'vue';
  */
 
 const app = createApp({});
-
-
 import ExampleComponent from './components/app.vue';
 app.component('app', app);
 

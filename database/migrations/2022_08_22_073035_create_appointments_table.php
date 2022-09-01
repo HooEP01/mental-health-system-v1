@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('event_id', 10);
             $table->string('user_id', 10);
             // end foreign key
-            $table->string('reason');
+            $table->text('reason');
             $table->string('status', 20);
-            $table->dateTime('start_datetime', $precision = 0);
-            $table->dateTime('end_datetime', $precision = 0);
+            $table->dateTime('start_datetime', $precision = 0)->nullable();
+            $table->dateTime('end_datetime', $precision = 0)->nullable();
             $table->timestamps();
         });
     }

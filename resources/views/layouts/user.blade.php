@@ -85,12 +85,10 @@
 
         <div class="cointainer-fluid bg-white">
             <div class="container">
-                <!-- header title -->
-
-            <!--
-        <h1></h1>
+                <!-- header title 
+             <h1>Welcome User</h1>
             -->
-                
+               
 
                 <!-- header nav -->
                 <ul class="nav">
@@ -101,7 +99,7 @@
                     </li>
                     <!-- home page -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('professional.home')}}">Dashboard</a>
+                        <a class="nav-link" href="{{route('home')}}">Dashboard</a>
                     </li>
                     <!-- content page -->
                     <li class="nav-item">
@@ -111,21 +109,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Transaction</a>
                     </li>
-
-                    @if(auth()->user()->is_admin == 1)
-
-                    <li class="nav-item">
-                        <a class="nav-link link-danger" href="#">Administrator</a>
-                    </li>
-                           
-                    @endif
                     
                 </ul>
             </div>
         </div>
-
+        
         <!-- main content -->
-        <main>
+        <main class="py-4">
             @yield('content')
         </main>
     </div>

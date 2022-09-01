@@ -1,144 +1,100 @@
-
-
 @extends('layouts.auth')
-
 @section('content')
-<div class="container">
+<div class="container p-3">
     <div class="row">
-
-        <div class="col-md-6 p-0 m-0">
-
-        <div class="col-md-12 p-2">
-            <div class="card">
-                <div class="card-body p-4">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    
-                    <!-- form -->
-                    <form action="{{route('professional.event.add')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
-                    @CSRF
-                        <input type="hidden" id="professional_id" name="professional_id" value="{{ Auth::id() }}">        
-                        <div class="row">
-                            <div class="col-12 p-2">
-                                <h5 class="fw-bold">Content</h5>
-                            </div>
-                            <div class="col-4 p-2">
-                                <label for="type">Type</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <select name="type" id="type" class="form-control" required>
-                                        <option value="indi">Individual Counseling</option>
-                                        <option value="group">Group Counseling</option>
-                                        <option value="seminar">Seminar</option>
-                                    </select>
-                                </div>
-                            </div>  
-
-                            <div class="col-4 p-2">
-                                <label for="attendance_quantity">Attendance Quality</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <input type="number" class="form-control" id="attendance_quantity" name="attendance_quantity" placeholder="" required>
-                                </div>
-                            </div>
-                            
-                            <div class="col-4 p-2">
-                                <label for="amount">Amount</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <input type="number" class="form-control" id="amount" name="amount" placeholder="" required>
-                                </div>
-                            </div>  
-
-                            <div class="col-4 p-2">
-                                <label for="image">Image</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <input type="file" class="form-control" id="image" name="image" placeholder="" required>
-                                    <small class="text-primary">500x500</small>
-                                </div>
-                            </div>  
-
-                            <div class="col-4 p-2">
-                                <label for="title">Title</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="" required>
-                                </div>
-                            </div>  
-
-                            <div class="col-4 p-2">
-                                <label for="summary">Summary</label>
-                            </div>
-                            <div class="col-8 p-2">
-                                <div class="form-group">
-                                    <textarea class="form-control" id="summary" name="summary" rows="4" required></textarea>
-                                </div>
-                            </div>   
-
-                            <div class="col-4 p-2">
-                                
-                            </div>
-                            <div class="col-8 p-2">
-                                <button type="submit" class="btn btn-outline-primary form-control">Add</button>
-                            </div>
-                        </div>    
-                    </form>
-                    <!--/ form -->
-
+        <div class="col-md-9 p-2">
+            <div class="row mt-md-2 mb-md-3">
+                <div class="col-md-6">
+                    <h5>My Individual Counselling</h5>
                 </div>
+                <div class="col-md-2 offset-md-4 d-grid">
+                    <a class="btn btn-outline-primary" href="{{route('professional.event.add',['type'=>'individual'])}}">+ Event</a>
+                </div>                
             </div>
-        </div>
-
-        </div>
-
-        <div class="col-md-6 p-0 m-0">
-        @foreach($events as $event)
-        <div class="col-md-12 p-2">
+            @foreach($individuals as $individual)
             <div class="card">
-                
-                
                 <div class="card-body">
                     <div class="row">
-                        <input type="hidden" id="id" name="id" value="{{ $event->id }}">
+                        <input type="hidden" id="id" name="id" value="{{ $individual->id }}">
                         <div class="col-12">
-                            <img src="{{ asset('event/')}}/{{ $event->image }}" alt="" class="img-fluid rounded card-img-top">
+                            <img src="{{ asset('individual/')}}/{{ $individual->image }}" alt="" class="img-fluid rounded card-img-top">
                         </div>
                         <div class="col-12">
-                            <h2 class="pt-3 pb-2">{{ $event->title }} <span class="badge bg-secondary"> {{$event->type }}</span></h2>
-                            <p>{{ $event->description }}</p>
+                            <h3 class="pt-3 pb-2">{{ $individual->title }}</h3>
+                            <p>{{ $individual->description }}</p>
                         </div>
                         <div class="col-6">
-                            <p>Attendance: {{ $event->attendance_quantity }}</p>  
+                            <p>Price <span class="text-primary">RM {{ $individual->amount }}.00</span></p>  
                         </div>
                         <div class="col-6">
-                            <p>Fee: {{ $event->amount }}</p>  
-                        </div>
-                        <div class="col-6">
-                            Schedule:  Mon: 7 - 10 am
+                            <p>Time</p> 
                         </div>    
-     
-
-                        <div class="col-12 pt-2">
-                            <a class="btn btn-primary" href="{{route('professional.event.edit',['id'=>$event->id])}}">Edit</a>  
-                            <a class="btn btn-danger float-end" href="{{route('professional.event.delete',['id'=>$event->id])}}">Delete</a>             
+                        <div class="col-md-6 pt-2">
+                            <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$individual->id])}}">View Appointment</a>  
+                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.edit',['id'=>$individual->id])}}">Edit Event</a>  
+                        </div>
+                        <div class="col-md-6 pt-2">
+                            <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$individual->id])}}">Delete Event</a>
                         </div>
                     </div>
                     
                 </div>
             </div>
-        </div>
+
+            @endforeach
+
+            <div class="row mt-md-5 mb-md-3">
+                <div class="col-md-6">
+                    <h5> My Group Counselling</h5>
+                </div>
+                <div class="col-md-2 offset-md-4 d-grid">
+                    <a class="btn btn-outline-primary" href="{{route('professional.event.add',['type'=>'group'])}}">+ Event</a>
+                </div>                
+            </div>
+
+        @foreach($groups as $group)
+            <div class="card mb-1">
+                <div class="card-body">
+                    <div class="row">
+                        <input type="hidden" id="id" name="id" value="{{ $group->id }}">
+                        <div class="col-12">
+                            <img src="{{ asset('group/')}}/{{ $group->image }}" alt="" class="img-fluid rounded card-img-top">
+                        </div>
+                        <div class="col-12">
+                            <h3 class="pt-3 pb-2">{{ $group->title }}</h3>
+                            <p>{{ $group->description }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p>Price <span class="text-primary">RM {{ $group->amount }}.00</span> </p>
+                            <p>Attendance Quantity <span class="text-success">{{ $group->attendance_quantity }}</span></p>  
+                            <p>Attendance Left <span class="text-danger">{{ $group->attendance_quantity }}</span></p>  
+                        </div>
+                        <div class="col-6">
+                            <p>Time</p>
+                        </div>
+   
+                        <p><span class="badge bg-secondary">{{ $group->type }}</span></p>
+     
+                        <div class="col-md-6 pt-2">
+                            <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$group->id])}}">View Event</a>  
+                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.edit',['id'=>$group->id])}}">Edit Event</a>  
+                            
+                        </div>
+                        <div class="col-md-6 pt-2">
+                            <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$group->id])}}">Delete Event</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
         @endforeach
-        </div>
+        
 
     </div>
+
+        </div>
+
+        
 </div>
 @endsection

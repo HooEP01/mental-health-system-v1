@@ -19,10 +19,10 @@ return new class extends Migration
             // start foreign key
             $table->string('content_id', 10);
             // end foreign key
-            $table->string('type', 20);
+            $table->string('type', 30);
             $table->string('image', 100)->nullable();
             $table->string('audio', 100)->nullable();
-            $table->string('subtitle');
+            $table->string('subtitle')->nullable();
             $table->text('description')->nullable();
         });
     }
