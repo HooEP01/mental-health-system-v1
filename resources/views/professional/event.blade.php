@@ -27,11 +27,23 @@
                             <p>Price <span class="text-primary">RM {{ $individual->amount }}.00</span></p>  
                         </div>
                         <div class="col-6">
-                            <p>Time</p> 
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Time: </p> 
+                                </div>
+                                <div class="col-md-10">
+                                    @foreach( $schedules as $schedule)
+                                    @if($individual->id == $schedule->event_id)
+                                    <p>{{ $schedule->start_datetime}} to {{ $schedule->end_datetime}}</p>
+                                    @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                            
                         </div>    
                         <div class="col-md-6 pt-2">
                             <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$individual->id])}}">View Appointment</a>  
-                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.edit',['id'=>$individual->id])}}">Edit Event</a>  
+                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.schedule.view',['id'=>$individual->id])}}">Edit Event</a>  
                         </div>
                         <div class="col-md-6 pt-2">
                             <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$individual->id])}}">Delete Event</a>
@@ -40,9 +52,7 @@
                     
                 </div>
             </div>
-
             @endforeach
-
             <div class="row mt-md-5 mb-md-3">
                 <div class="col-md-6">
                     <h5> My Group Counselling</h5>
@@ -51,8 +61,7 @@
                     <a class="btn btn-outline-primary" href="{{route('professional.event.add',['type'=>'group'])}}">+ Event</a>
                 </div>                
             </div>
-
-        @foreach($groups as $group)
+            @foreach($groups as $group)
             <div class="card mb-1">
                 <div class="card-body">
                     <div class="row">
@@ -72,29 +81,25 @@
                         <div class="col-6">
                             <p>Time</p>
                         </div>
-   
                         <p><span class="badge bg-secondary">{{ $group->type }}</span></p>
-     
                         <div class="col-md-6 pt-2">
                             <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$group->id])}}">View Event</a>  
-                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.edit',['id'=>$group->id])}}">Edit Event</a>  
-                            
+                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.schedule.view',['id'=>$group->id])}}">Edit Event</a>  
                         </div>
                         <div class="col-md-6 pt-2">
                             <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$group->id])}}">Delete Event</a>
                         </div>
                     </div>
-                    
                 </div>
             </div>
-
-        @endforeach
-        
-
-    </div>
-
+            @endforeach
         </div>
-
-        
+    </div>   
 </div>
 @endsection
+
+
+<script>
+    var app = {{ Js::from($schedules) }};
+    console.log(app);
+</script>

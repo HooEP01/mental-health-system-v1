@@ -1,8 +1,3 @@
-<script>
-    let schedules = <?php echo json_encode($events); ?>;
-    console.log(schedules);
-</script>
-
 @extends('layouts.user')
 @section('content')
 <div class="container">

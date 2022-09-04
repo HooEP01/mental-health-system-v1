@@ -35,8 +35,13 @@ class EventController extends Controller
         -> where('events.type','!=','Individual Counselling')
         -> orderBy('created_at','desc')
         -> get();
-        
-        return view('professional.event')->with('individuals',$individuals)->with('groups', $groups);
+        $schedules = DB::table('schedules')
+        -> join('events','events.id','=','schedules.event_id')
+        -> select('schedules.*', 'events.id', 'events.professional_id')
+        -> where('events.professional_id','=',Auth::id())
+        -> orderBy('day','desc')
+        -> get();
+        return view('professional.event')->with('individuals',$individuals)->with('groups', $groups)->with('schedules', $schedules);
     }
     
     public function add($type)
@@ -68,7 +73,6 @@ class EventController extends Controller
 
     public function edit($id){
         $events=Event::all()->where('id',$id);
-
         $schedules = DB::table('schedules')
         -> select('schedules.*')
         -> where('schedules.event_id','=', $id)
@@ -81,7 +85,6 @@ class EventController extends Controller
     public function update()
     {
         $r=request();
-
         // image
         $imageName='';
         if($r->file('image')!= ''){
@@ -89,7 +92,6 @@ class EventController extends Controller
             $image->move('event',$image->getClientOriginalName());
             $imageName=$image->getClientOriginalName();
         }
-
         $events=Event::find($r->id);
         $events->type=$r->type;
         $events->attendance_quantity=$r->attendance_quantity;
@@ -98,7 +100,6 @@ class EventController extends Controller
         $events->title=$r->title;
         $events->description=$r->description;
         $events->save();
-        
         return redirect()->route('professional.event.view');
     }
 

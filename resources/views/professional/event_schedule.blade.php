@@ -1,6 +1,5 @@
 @extends('layouts.auth')
 @section('content')
-
 <div class="cointainer-fluid bg-white">
     <div class="container">
         <!-- header nav -->
@@ -28,10 +27,10 @@
             <div class="card">
                 <div class="card-body">
                     <!-- form start -->
-                    <form action="{{route('professional.event.schedule.update')}}" method="POST">  
+                    <form action="{{route('professional.event.schedule.create')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">  
                     @CSRF
                         <!-- Event id (foreign key)-->
-                        <input type="hidden" id="event_id" name="event_id" value="">
+                        <input type="hidden" id="event_id" name="event_id" value="{{ $event_id }}">
                         <div class="row">
                             <!-- Periodical -->
                             <div class="col-4 p-2">
@@ -93,45 +92,213 @@
                     
                 </div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="card-body">
-                @foreach($schedules as $schedule)
-                    <div class="card p-2 mb-2">
-                        <div class="card-body p-2">
-                            <div class="row">
-                                <div class="col-2">Day</div>
-                                <div class="col-4">: {{$schedule->day}}</div>
-                                <div class="col-6"></div>
+        <div class="row mt-md-4 mb-md-3">
+            <div class="col-md-6">
+                <h5> My Event Schedule History </h5>
+            </div>               
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-md-12">
+            @foreach($schedules as $schedule)
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">Day</div>
+                            <div class="col-4">: {{$schedule->day}}</div>
+                            <div class="col-6"></div>
                
                                 <div class="col-6">
                                 <div class="row">
                                     <div class="col-4">Start</div>
-                                    <div class="col-8">: {{$schedule->start_date}}</div>
+                                    <div class="col-8">: {{$schedule->start_datetime}}</div>
                                     <div class="col-4">End</div>
-                                    <div class="col-8">: {{$schedule->end_date}}</div>
+                                    <div class="col-8">: {{$schedule->end_datetime}}</div>
                                 </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="row">
-                                        <div class="col-4">Start</div>
-                                        <div class="col-8">: {{$schedule->start_time}}</div>
-                                        <div class="col-4">End</div>
-                                        <div class="col-8">: {{$schedule->hour}}</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <a class="btn btn-danger" href="{{route('schedule.delete',['id'=>$schedule->id])}}">delete</a>
+                                
+                                <div class="col-6 ">
+                                    <a class="btn btn-danger float-end" href="{{route('professional.event.schedule.delete',['id'=>$schedule->id])}}">delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     @endforeach
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="list" class="list">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+      
 
     </div>
 </div>
 
 @endsection
+
+<script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(
+        function(){
+            document.addEventListener("load", periodicalCal());
+            let list = document.getElementById('list');
+            let htmlStr = ''
+            sortedAsc.forEach(function (item){
+                htmlStr = htmlStr + `
+                            <div class="item">
+                                <div>
+                                    <p>Time: ${item.date} </p>
+                                </div>
+                            </div>`;
+                list.innerHTML = htmlStr;
+            })
+        }
+    );
+
+    function periodicalCal() {
+        // daily, weekly, biweekly, monthly, yearly
+        let periodical = document.getElementById('periodical').value;
+        let today = new Date();
+        // this month
+        let month = (today.getMonth()+1 > 9)? today.getMonth()+1 : '0'+ (today.getMonth()+1);
+        // this date
+        let date = (today.getDate() > 9)? today.getDate() : '0'+ today.getDate();
+        // result format 2022-01-01
+        let result = today.getFullYear()+'-'+month+'-'+date;
+        // set only show future date.
+        startAt.setAttribute("min", result);
+        endAt.setAttribute("min", result);
+    
+        if( periodical === "Daily" ){
+            dayChange.innerHTML = ` <input type="hidden" id="day" name="day" value="7">`;
+            startAt.setAttribute("step", 0);
+            endAt.setAttribute("step", 0);
+        }else {
+            dayChange.innerHTML = ` <div class="col-4 p-2">
+                                        <label for="day">Day</label>
+                                    </div>
+                                    <div class="col-8 p-2">
+                                        <select name="day" id="day" class="form-select" onchange="selectedDay()"  required>
+                                            <option value="1">Monday</option>
+                                            <option value="2">Tuesday</option>
+                                            <option value="3">Wednesday</option>
+                                            <option value="4">Thursday</option>
+                                            <option value="5">Friday</option>
+                                            <option value="6">Saturday</option>
+                                            <option value="0">Sunday</option>
+                                        </select>
+                                    </div>`;
+            document.addEventListener("load", selectedDay());
+
+            if(periodical === "Weekly"){
+                startAt.setAttribute("step", 7);
+                endAt.setAttribute("step", 7);
+            }else if(periodical === "Biweekly"){
+                startAt.setAttribute("step", 14);
+                endAt.setAttribute("step", 14);
+            }else if(periodical === "Monthly"){
+                startAt.setAttribute("step", 28);
+                endAt.setAttribute("step", 28);
+            }else{
+                startAt.setAttribute("step", 365);
+                endAt.setAttribute("step", 365);
+            }
+            
+        }
+    }
+
+    function startTimeCal() {
+        let startTime = document.getElementById("startTime").value;
+        endTime.setAttribute("min", startTime);
+    }
+
+    function startAtCal() {
+        let startDate = document.getElementById("startAt").value;
+        endAt.setAttribute("min", startDate);
+        document.getElementById('endAt').value = startDate;
+    }
+
+    function selectedDay() {
+        document.getElementById('startAt').value = "";
+        document.getElementById('endAt').value = "";
+        // Monday, Tuesday...
+        let day = document.getElementById("day").value;
+        let today = new Date();
+        // this month
+        let month = (today.getMonth() + 1 > 9)? today.getMonth()+1 : '0'+ (today.getMonth()+1);
+        // this date
+        let date = ((today.getDate() - today.getDay() + parseInt(day)) > 9)? (today.getDate() - today.getDay() + parseInt(day)) : '0'+ (today.getDate() - today.getDay() + parseInt(day));
+        
+        if( date === "0" + (today.getDate() + 7)){
+            date = (today.getDate() > 9)? today.getDate() : '0'+ today.getDate();
+        }
+        // result format 2022-01-01
+        let result = today.getFullYear()+'-'+month+'-'+date;
+        startAt.setAttribute("min", result);
+        endAt.setAttribute("min", result);
+    }
+
+    let data = <?php echo json_encode($schedules); ?>;
+    console.log(data);
+    // print schedules 
+    const arraySchedule = [];
+    for(let i = 0; i < data.length; i++){
+        let startDatetime = new Date(data[i]['start_datetime']);
+        let endDatetime = new Date(data[i]['end_datetime']);
+        let startDate = startDatetime.getDate();
+        let endDate = endDatetime.getDate();
+        let startHour = startDatetime.getHours();
+        let endHour = endDatetime.getHours();
+        let startTime = startDatetime.getTime();
+        let endTime = endDatetime.getTime();
+        let periodical = data[i]['periodical'];
+        let differenceDate = Math.ceil((endTime - startTime) / (1000 * 3600 * 24));
+        let step = 1;
+        if(periodical === "Daily"){
+            step = 1;
+        }else if(periodical === "Weekly"){
+            step = 7;
+        }else if(periodical === "Biweekly"){
+            step = 14;
+        }else if(periodical === "Monthy"){
+            step = 28;
+        }else if(periodical === "Yearly"){
+            step = 365;
+        }
+
+        let currentDatetime = new Date(data[i]['start_datetime']);
+        for(let j = 0; j < differenceDate; j+=step){
+            let h = 0;
+            for(let k = startHour; k < endHour; k++){
+                currentDatetime.setHours(currentDatetime.getHours() + (h++));
+                arraySchedule.push({
+                    date: new Date(currentDatetime),
+                });
+            }
+            currentDatetime.setDate(currentDatetime.getDate() + step);
+            currentDatetime.setHours(startHour);
+        }
+
+        
+    }
+    
+    const sortedAsc = arraySchedule.sort(
+        (objA, objB) => Number(objA.date) - Number(objB.date),
+    );
+
+
+</script>
+

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('title');
             $table->text('summary')->nullable();
-            $table->boolean('is_approve')->default(false);
+            $table->boolean('is_approve');
             $table->timestamps();
         });
     }

@@ -20,17 +20,18 @@
         <div class="col-md-12 p-0 ps-3 pe-3">
             <div class="row">
                 <div class="col-md-2 p-1">
-                    <a class="btn btn-outline-primary form-control" href="{{ route('professional.content.add') }}">+ Content</a>
+                    <h5>Community Content</h5>
+                   
                 </div>
                 <div class="col-md-2 p-2"></div>
                 <div class="col-md-4 p-1 d-grid">
-                    <form action="{{route('professional.content.search')}}" method="POST">
+                    <form action="{{route('professional.content.community.search')}}" method="POST">
                         @csrf
                         <div><input type="search" id="name" name="name" class="form-control " placeholder="Search"></div>
                     </form>
                 </div>
                 <div class="col-md-4 p-1 d-grid">
-                    <form action="{{route('professional.content.filter')}}" method="POST">
+                    <form action="{{route('professional.content.community.filter')}}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-8">
@@ -74,9 +75,7 @@
                     <!-- Updated_at + type + category -->
                     <p> <small> {{ $content->updated_at}}</small> <br> <span class="badge bg-success"> {{$content->type}}</span> <span class="badge bg-primary"> {{$content->category}} </span> </p>
                     <!-- Add more btn (redirect to content detail page) -->
-                    <a class="btn btn-outline-primary" href="{{route('professional.content_detail.view',['id'=>$content->id])}}">View Content</a>  
-                    <!-- delete btn -->
-                    <a class="btn btn-outline-danger float-end" onclick="swal('{{ $content->id }}');" >Delete Content</a>              
+                    <a class="btn btn-outline-primary" href="{{route('professional.content.community.detail.view',['id'=>$content->id])}}">View Content</a>            
                 </div>
             </div>      
         </div>
@@ -88,26 +87,3 @@
 </div>
 @endsection
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function swal(id)
-    {
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                new function() {
-                window.location.href = "{{route('professional.content.delete', '')}}"+"/"+id;
-                };
-            }
-        })
-    }
-</script>

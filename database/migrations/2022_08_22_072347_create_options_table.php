@@ -18,7 +18,7 @@ return new class extends Migration
             // start foreign key
             $table->string('content_detail_id', 10);
             // end foreign key
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }

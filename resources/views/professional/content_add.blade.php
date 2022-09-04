@@ -15,23 +15,21 @@
         </ul>
     </div>
 </div>
-<div class="container">
-    <div class="row pt-3">
+<div class="container pt-3">
+    <div class="row">
         <div class="col-md-10 p-2">
-            <h5 class="fw-bold ps-1">Edit Content</h5>
+            <h5 class="fw-bold ps-1">Create New Content</h5>
         </div>
-        @foreach($contents as $content)
         <div class="col-md-2 p-2 d-grid">
-            <a class="btn btn-outline-dark" href="{{route('professional.content_detail.view',['id'=> $content->id])}}">< Back</a>
+            <a class="btn btn-outline-dark" href="{{route('professional.content.view')}}">< Back</a>
         </div>
         <div class="col-md-12 p-2">
             <div class="card">
                 <div class="card-body">
                     <!-- form -->
-                    <form action="{{route('professional.content.update')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
+                    <form action="{{route('professional.content.create')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
                     @CSRF
                         <!-- Professional_id -->
-                        <input type="hidden" id="id" name="id" value="{{ $content->id }}">
                         <input type="hidden" id="professional_id" name="professional_id" value="{{ Auth::id() }}">        
                         <div class="row">
                             <div class="col-12 p-2">
@@ -44,7 +42,6 @@
                             <div class="col-8 p-2">
                                 <div class="form-group">
                                     <select name="type" id="type" class="form-select" required>
-                                        <option value="{{ $content->type }}" selected> {{ $content->type }} </option>
                                         <option value="Article">Article</option>
                                         <option value="Questionaire">Questionaire</option>
                                         <option value="Guided Jornal">Guided Jornal</option>
@@ -58,7 +55,6 @@
                             <div class="col-8 p-2">
                                 <div class="form-group">
                                     <select name="category" id="category" class="form-select" required>
-                                        <option value="{{ $content->category }}" selected> {{ $content->category }} </option>
                                         <option value="Workplace">Workplace</option>
                                         <option value="Stress">Stress</option>
                                         <option value="Self-love">Self-love</option>
@@ -75,8 +71,8 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                <input type="file" class="form-control" id="image" name="image" placeholder="">
-                                <small class="text-primary">Size: 1280x960, Type: .png .jpg .jpeg</small>
+                                <input type="file" class="form-control" id="image" name="image" placeholder="" required>
+                                    <small class="text-primary">Size: 1280x960, Type: .png .jpg .jpeg</small>
                                 </div>
                             </div>  
                             <!-- Title -->
@@ -85,7 +81,7 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="" required value="{{ $content->title }}">
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="" required>
                                 </div>
                             </div>  
                             <!-- Summary -->
@@ -94,17 +90,16 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                    <textarea class="form-control summernote" id="summary" name="summary" rows="4" required value="{{ $content->summary }}"></textarea>
+                                    <textarea id="summary" class="form-control summernote" rows="5" name="summary" required></textarea>
                                 </div>
                             </div>   
                             <div class="col-4 p-2"></div>
                             <div class="col-8 p-2">
-                                <button type="submit" class="btn btn-outline-primary form-control">Update</button>
+                                <button type="submit" class="btn btn-outline-primary form-control">Save</button>
                             </div>
                         </div>    
                     </form>
-                    <!--/ form -->
-                    @endforeach
+                    <!-- form -->
                 </div>
             </div>
         </div>

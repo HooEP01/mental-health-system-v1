@@ -19,15 +19,7 @@
                         <form action="{{route('profile.update')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
                             
                             <input type="hidden" id="id" name="id" value="{{$user->id}}">
-                            <div class="row">
-                                <div class="col-4 p-2">
-                                    <label for="fullname">Full Name</label>
-                                </div>
-                                <div class="col-8 p-2">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="fullname" required value="{{$user->full_name}}">
-                                    </div>
-                                </div>   
+                            <div class="row"> 
                                 <div class="col-4 p-2">
                                     <label for="year_of_birth">Year of Birth</label>
                                 </div>

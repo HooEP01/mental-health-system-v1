@@ -86,11 +86,7 @@
         <div class="cointainer-fluid bg-white">
             <div class="container">
                 <!-- header title -->
-
-            <!--
-        <h1></h1>
-            -->
-                
+                <h1>Welcome Back Professional</h1>
 
                 <!-- header nav -->
                 <ul class="nav">
@@ -128,6 +124,14 @@
         <main>
             @yield('content')
         </main>
+
+        <footer>
+            <div class="cointainer">
+                <div style="height:10vh">
+
+                </div>
+            </div>
+        </footer>
     </div>
 </body>
 </html>

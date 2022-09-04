@@ -52,7 +52,8 @@ Route::group(['middleware' => 'auth:professional'], function () {
     // content
     Route::controller(ContentController::class)->group(function() {
         Route::get('/professional/content', 'view')->name('professional.content.view');
-        Route::post('/professional/content/add', 'add')->name('professional.content.add');
+        Route::get('/professional/content/add', 'add')->name('professional.content.add');
+        Route::post('/professional/content/create', 'create')->name('professional.content.create');
         Route::post('/professional/content/search', 'search')->name('professional.content.search');
         Route::post('/professional/content/filter', 'filter')->name('professional.content.filter');
         Route::get('/professional/content/delete/{id}', 'delete')->name('professional.content.delete');
@@ -65,6 +66,12 @@ Route::group(['middleware' => 'auth:professional'], function () {
         Route::get('/professional/content/detail/delete/{id}', 'deleteDetail')->name('professional.content_detail.delete');
         Route::get('/professional/content/detail/edit/{id}', 'editDetail')->name('professional.content_detail.edit');
         Route::post('/professional/content/detail/update', 'updateDetail')->name('professional.content_detail.update');
+
+        // community
+        Route::get('/professional/content/community', 'viewAll')->name('professional.content.community.view');
+        Route::post('/professional/content/community/search', 'searchAll')->name('professional.content.community.search');
+        Route::post('/professional/content/community/filter', 'filterAll')->name('professional.content.community.filter');
+        Route::get('/professional/content/community/detail/{id}', 'viewDetailAll')->name('professional.content.community.detail.view');
     });
 
     // event

@@ -29,7 +29,7 @@ class ScheduleController extends Controller
         -> where('schedules.event_id','=', $event_id)
         -> orderBy('created_at','desc')
         -> get();
-        return view('professional.event_schedule')->with('schedules', $schedules);
+        return view('professional.event_schedule')->with('schedules', $schedules)->with('event_id', $event_id);
     }
 
     public function create() 
