@@ -95,6 +95,10 @@
                     <li class="nav-item">
                         <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.event.view')}}">Event</a>
                     </li>
+                    <!-- Appointment page -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('professional.appointment.view')}}">Appointment</a>
+                    </li>
                     <!-- home page -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('professional.home')}}">Dashboard</a>
@@ -111,7 +115,7 @@
                     @if(auth()->user()->is_admin == 1)
 
                     <li class="nav-item">
-                        <a class="nav-link link-danger" href="#">Administrator</a>
+                        <a class="nav-link link-danger" href="{{route('administrator.content.view')}}">Administrator</a>
                     </li>
                            
                     @endif

@@ -305,4 +305,26 @@ class ContentController extends Controller
         return view('professional.content_community_detail')->with('contents', $contents)->with('content_details', $content_details)->with('options',$options);
     }
 
+    /*
+    | Administrator
+    | Approve
+    */
+    public function adminView()
+    {
+        $contents = DB::table('contents')
+        -> leftjoin('professionals','professionals.id','=','contents.professional_id')
+        -> select('contents.*','professionals.name as professional_id')
+        -> orderBy('updated_at','desc')
+        -> paginate(10);
+        return view('administrator.content')->with('contents',$contents);
+    }
+
+    public function adminApprove($id)
+    {
+        $contents = Appointment::find($id);
+        $contents->is_approve = 1;
+        $contents->save();
+        return redirect()->route('administrator.content.view');
+    }
+
 }

@@ -138,10 +138,8 @@ class EventController extends Controller
        {
            $events = DB::table('events')
            -> select('events.*')
-           -> where('events.type','!=',"individual Counselling")
            -> orderBy('created_at','desc')
            -> paginate(6);
-           
            return view('event')->with('events',$events);
        }
    
