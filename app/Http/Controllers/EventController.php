@@ -23,17 +23,10 @@ class EventController extends Controller
 
     public function view()
     {
-        $individuals = DB::table('events')
+        $events = DB::table('events')
         -> select('events.*')
         -> where('events.professional_id','=',Auth::id())
-        -> where('events.type','=','Individual Counselling')
-        -> orderBy('created_at','desc')
-        -> get();
-        $groups = DB::table('events')
-        -> select('events.*')
-        -> where('events.professional_id','=',Auth::id())
-        -> where('events.type','!=','Individual Counselling')
-        -> orderBy('created_at','desc')
+        -> orderBy('type','desc')
         -> get();
         $schedules = DB::table('schedules')
         -> join('events','events.id','=','schedules.event_id')
@@ -41,7 +34,7 @@ class EventController extends Controller
         -> where('events.professional_id','=',Auth::id())
         -> orderBy('day','desc')
         -> get();
-        return view('professional.event')->with('individuals',$individuals)->with('groups', $groups)->with('schedules', $schedules);
+        return view('professional.event')->with('events', $events)->with('schedules', $schedules);
     }
     
     public function add($type)
@@ -73,13 +66,7 @@ class EventController extends Controller
 
     public function edit($id){
         $events=Event::all()->where('id',$id);
-        $schedules = DB::table('schedules')
-        -> select('schedules.*')
-        -> where('schedules.event_id','=', $id)
-        -> orderBy('created_at','desc')
-        -> paginate(6);
-
-        return view('professional.event_detail')->with('events',$events)->with('schedules',$schedules);
+        return view('professional.event_edit')->with('events',$events);
     }
 
     public function update()
@@ -92,11 +79,11 @@ class EventController extends Controller
             $image->move('event',$image->getClientOriginalName());
             $imageName=$image->getClientOriginalName();
         }
-        $events=Event::find($r->id);
+        $events=Event::find($r->event_id);
         $events->type=$r->type;
         $events->attendance_quantity=$r->attendance_quantity;
         $events->amount=$r->amount;
-        $events->image=$r->imageName;
+        $events->image=$imageName;
         $events->title=$r->title;
         $events->description=$r->description;
         $events->save();

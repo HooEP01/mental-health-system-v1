@@ -1,29 +1,22 @@
 @extends('layouts.auth')
 @section('content')
-<div class="cointainer-fluid bg-white">
-    <div class="container">
-        <!-- header nav -->
-        <ul class="nav">
-            <!-- Event page -->
-            <li class="nav-item">
-                <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.event.view')}}">Event Home Page</a>
-            </li>
-            <!-- home page -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('professional.home')}}">Event Setting</a>
-            </li>
-        </ul>
-    </div>
-</div>
-
 <div class="container p-3">
-    <div class="row mt-md-2 mb-md-3">
-        <div class="col-md-6">
-            <h5> My Event Schedule</h5>
+    <!-- title -->
+    <div class="row">
+        <div class="col-md-12 p-2">
+            <div class="row mt-md-2 mb-md-3">
+                <!-- title -->
+                <div class="col-md-6">
+                    <h5 class="fw-bold ps-1">My Event Schedule</h5>
+                </div>
+                <div class="col-md-2 offset-md-4 d-grid">
+                    <a class="btn btn-dark" href="{{route('professional.event.view')}}">Back</a>
+                </div>                
+            </div>
         </div>               
     </div>
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12 p-2">
             <div class="card">
                 <div class="card-body">
                     <!-- form start -->
@@ -33,10 +26,10 @@
                         <input type="hidden" id="event_id" name="event_id" value="{{ $event_id }}">
                         <div class="row">
                             <!-- Periodical -->
-                            <div class="col-4 p-2">
-                                <label for="periodical">Periodical</label>
+                            <div class="col-md-2 p-2">
+                                <label for="periodical" class="form-label">Periodical</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <div class="form-group">
                                     <select name="periodical" id="periodical" class="form-select" onload="periodicalCal()" onchange="periodicalCal()" required>
                                         <option value="Daily" selected>Daily</option>
@@ -52,41 +45,41 @@
 
                             </div>
                             <!-- Start At -->
-                            <div class="col-4 p-2">
-                                <label for="startAt">Start At</label>
+                            <div class="col-md-2 p-2">
+                                <label for="startAt" class="form-label">Start At</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <input type="date" class="form-control" id="startAt" name="startAt" onchange="startAtCal()" required>
                             </div>
                             <!-- Start At -->
-                            <div class="col-4 p-2">
-                                <label for="endAt">End At</label>
+                            <div class="col-md-2 p-2">
+                                <label for="endAt" class="form-label">End At</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <input type="date" class="form-control" id="endAt" name="endAt" required>
                             </div>
 
                             <!-- Time Start At -->
-                            <div class="col-4 p-2">
-                                <label for="time">Time Start At</label>
+                            <div class="col-md-2 p-2">
+                                <label for="time" class="form-label">Time Start At</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <input type="time" class="form-control" id="startTime" name="startTime" min=08:00 max=20:00 step=3600 value=08:00 onchange="startTimeCal()" required>
                             </div>
 
                             <!-- Time Start At -->
-                            <div class="col-4 p-2">
-                                <label for="endTime">Time End At</label>
+                            <div class="col-md-2 p-2">
+                                <label for="endTime" class="form-label">Time End At</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <input type="time" class="form-control" id="endTime" name="endTime" min=08:00 max=20:00 step=3600 value=10:00  onchange="startTimeCal()" required>
                                 <p id="displayTime" class="text-primary pt-2"></p>
                             </div>
 
                             <!-- submit -->
-                            <div class="col-4 p-2"></div>
-                            <div class="col-8 p-2">
-                                <button type="submit" class="form-control">Submit</button>
+                            <div class="col-md-2 p-2"></div>
+                            <div class="col-md-10 p-2">
+                                <button type="submit" class="btn btn-primary form-control">Submit</button>
                             </div>
                     </form>
                     
@@ -94,15 +87,28 @@
             </div>
         </div>
 
-        <div class="row mt-md-4 mb-md-3">
+
+        @foreach($schedules as $schedule)
+        
+        @php
+            $scheduleCount = 0;
+        @endphp
+
+        @if($scheduleCount == 0)
+        <div class="row mt-5">
             <div class="col-md-6">
-                <h5> My Event Schedule History </h5>
-            </div>               
+                <h5 class="fw-bold ps-1">My Event Schedule History</h5>
+            </div>             
         </div>
+
+        @php
+            $scheduleCount++;
+        @endphp
+
+        @endif
         
         <div class="row mt-3">
             <div class="col-md-12">
-            @foreach($schedules as $schedule)
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="row">
@@ -110,24 +116,24 @@
                             <div class="col-4">: {{$schedule->day}}</div>
                             <div class="col-6"></div>
                
-                                <div class="col-6">
-                                <div class="row">
-                                    <div class="col-4">Start</div>
-                                    <div class="col-8">: {{$schedule->start_datetime}}</div>
-                                    <div class="col-4">End</div>
-                                    <div class="col-8">: {{$schedule->end_datetime}}</div>
-                                </div>
-                                </div>
+                            <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">Start</div>
+                                <div class="col-8">: {{$schedule->start_datetime}}</div>
+                                <div class="col-4">End</div>
+                                <div class="col-8">: {{$schedule->end_datetime}}</div>
+                            </div>
+                            </div>
                                 
-                                <div class="col-6 ">
-                                    <a class="btn btn-danger float-end" href="{{route('professional.event.schedule.delete',['id'=>$schedule->id])}}">delete</a>
-                                </div>
+                            <div class="col-6 ">
+                                <a class="btn btn-danger float-end" href="{{route('professional.event.schedule.delete',['id'=>$schedule->id])}}">Delete</a>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                </div>
             </div>
         </div>
+        
 
         <div class="row mt-3">
             <div class="col-md-12">
@@ -141,6 +147,8 @@
             </div>
         </div>
 
+        @endforeach
+
       
 
     </div>
@@ -148,8 +156,11 @@
 
 @endsection
 
+
+
 <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    let data = {{ Js::from($schedules) }};
     $(document).ready(
         function(){
             document.addEventListener("load", periodicalCal());
@@ -186,10 +197,10 @@
             startAt.setAttribute("step", 0);
             endAt.setAttribute("step", 0);
         }else {
-            dayChange.innerHTML = ` <div class="col-4 p-2">
-                                        <label for="day">Day</label>
+            dayChange.innerHTML = ` <div class="col-md-2 p-2">
+                                        <label for="day" class="form-label">Day</label>
                                     </div>
-                                    <div class="col-8 p-2">
+                                    <div class="col-md-10 p-2">
                                         <select name="day" id="day" class="form-select" onchange="selectedDay()"  required>
                                             <option value="1">Monday</option>
                                             <option value="2">Tuesday</option>
@@ -239,7 +250,7 @@
         // this month
         let month = (today.getMonth() + 1 > 9)? today.getMonth()+1 : '0'+ (today.getMonth()+1);
         // this date
-        let date = ((today.getDate() - today.getDay() + parseInt(day)) > 9)? (today.getDate() - today.getDay() + parseInt(day)) : '0'+ (today.getDate() - today.getDay() + parseInt(day));
+        let date = ((today.getDate() - today.getDay() + parseInt(day)) + 7 > 9)? (today.getDate() - today.getDay() + parseInt(day)) + 7 : '0'+ (today.getDate() - today.getDay() + parseInt(day) + 7);
         
         if( date === "0" + (today.getDate() + 7)){
             date = (today.getDate() > 9)? today.getDate() : '0'+ today.getDate();
@@ -250,8 +261,6 @@
         endAt.setAttribute("min", result);
     }
 
-    let data = <?php echo json_encode($schedules); ?>;
-    console.log(data);
     // print schedules 
     const arraySchedule = [];
     for(let i = 0; i < data.length; i++){
@@ -290,10 +299,9 @@
             currentDatetime.setDate(currentDatetime.getDate() + step);
             currentDatetime.setHours(startHour);
         }
-
-        
     }
     
+    // sort in ascending order 
     const sortedAsc = arraySchedule.sort(
         (objA, objB) => Number(objA.date) - Number(objB.date),
     );

@@ -316,7 +316,7 @@ class ContentController extends Controller
         -> select('contents.*','professionals.name as professional_id')
         -> orderBy('updated_at','desc')
         -> paginate(10);
-        return view('administrator.content')->with('contents',$contents);
+        return view('administrator.content_approve')->with('contents',$contents);
     }
 
     public function adminApprove($id)

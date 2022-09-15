@@ -2,104 +2,179 @@
 @section('content')
 <div class="container p-3">
     <div class="row">
-        <div class="col-md-9 p-2">
+        <div class="col-md-12 p-2">
             <div class="row mt-md-2 mb-md-3">
+                <!-- title -->
                 <div class="col-md-6">
-                    <h5>My Individual Counselling</h5>
+                    <h5 class="fw-bold ps-1">My Individual Counselling</h5>
                 </div>
                 <div class="col-md-2 offset-md-4 d-grid">
-                    <a class="btn btn-outline-primary" href="{{route('professional.event.add',['type'=>'individual'])}}">+ Event</a>
+                    <a class="btn btn-primary" href="{{route('professional.event.add',['type'=>'individual'])}}">+ Event</a>
                 </div>                
             </div>
-            @foreach($individuals as $individual)
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <input type="hidden" id="id" name="id" value="{{ $individual->id }}">
-                        <div class="col-12">
-                            <img src="{{ asset('individual/')}}/{{ $individual->image }}" alt="" class="img-fluid rounded card-img-top">
-                        </div>
-                        <div class="col-12">
-                            <h3 class="pt-3 pb-2">{{ $individual->title }}</h3>
-                            <p>{{ $individual->description }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Price <span class="text-primary">RM {{ $individual->amount }}.00</span></p>  
-                        </div>
-                        <div class="col-6">
+
+            @php
+                $groupCount = 0;
+            @endphp
+
+
+            @foreach($events as $event)
+
+            @if($event->type == "Individual Counselling")
+            
+            <div class="row">
+                <!-- image (event poster)-->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <img src="{{ asset('event/')}}/{{ $event->image }}" alt="" class="img-fluid rounded card-img-top">
+                </div>
+                <!-- event's content -->
+                <div class="col-md-8 d-flex align-items-stretch">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <p>Time: </p> 
+                                <!-- event id -->
+                                <input type="hidden" id="id" name="id" value="{{ $event->id }}">
+                                <!-- event title & description -->
+                                <div class="col-md-12">
+                                    <h3 class="pt-3 pb-2">{{ $event->title }}</h3>
+                                    {!!$event->description!!}
                                 </div>
-                                <div class="col-md-10">
-                                    @foreach( $schedules as $schedule)
-                                    @if($individual->id == $schedule->event_id)
-                                    <p>{{ $schedule->start_datetime}} to {{ $schedule->end_datetime}}</p>
-                                    @endif
-                                    @endforeach
+                                <!-- price -->
+                                <div class="col-md-6">
+                                    <p>Price <span class="text-primary">RM {{ $event->amount }}.00</span></p>  
+                                </div>
+                                <!-- schedule -->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p>Time: </p> 
+                                        </div>
+                                        <div class="col-md-10">
+                                            @foreach( $schedules as $schedule)
+                                            @if($event->id == $schedule->event_id)
+                                            <p>{{ $schedule->start_datetime }} to {{ $schedule->end_datetime}}</p>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>  
+                                <!-- event button -->  
+                                <div class="col-md-8 pb-3 position-absolute bottom-0 d-grid">
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="{{route('professional.event.edit',['id'=>$event->id])}}">Edit</a>  
+                                        <a class="btn btn-outline-primary" href="{{route('professional.event.schedule.view',['id'=>$event->id])}}">Schedule</a>  
+                                    </div>
+                                </div>
+                                <div class="col-md-4 pb-3 position-absolute bottom-0 end-0 d-grid">
+                                    <a class="btn btn-danger float-end" href="{{route('professional.event.delete',['id'=>$event->id])}}">Delete</a>
                                 </div>
                             </div>
-                            
-                        </div>    
-                        <div class="col-md-6 pt-2">
-                            <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$individual->id])}}">View Appointment</a>  
-                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.schedule.view',['id'=>$individual->id])}}">Edit Event</a>  
-                        </div>
-                        <div class="col-md-6 pt-2">
-                            <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$individual->id])}}">Delete Event</a>
                         </div>
                     </div>
-                    
                 </div>
             </div>
-            @endforeach
+            
+
+        
+            @if($groupCount == 0)
             <div class="row mt-md-5 mb-md-3">
                 <div class="col-md-6">
-                    <h5> My Group Counselling</h5>
+                    <h5 class="fw-bold ps-1">My Group Counselling</h5>
                 </div>
                 <div class="col-md-2 offset-md-4 d-grid">
-                    <a class="btn btn-outline-primary" href="{{route('professional.event.add',['type'=>'group'])}}">+ Event</a>
+                    <a class="btn btn-dark" href="{{route('professional.event.add',['type'=>'group'])}}">+ Event</a>
                 </div>                
             </div>
-            @foreach($groups as $group)
-            <div class="card mb-1">
-                <div class="card-body">
-                    <div class="row">
-                        <input type="hidden" id="id" name="id" value="{{ $group->id }}">
-                        <div class="col-12">
-                            <img src="{{ asset('group/')}}/{{ $group->image }}" alt="" class="img-fluid rounded card-img-top">
-                        </div>
-                        <div class="col-12">
-                            <h3 class="pt-3 pb-2">{{ $group->title }}</h3>
-                            <p>{{ $group->description }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Price <span class="text-primary">RM {{ $group->amount }}.00</span> </p>
-                            <p>Attendance Quantity <span class="text-success">{{ $group->attendance_quantity }}</span></p>  
-                            <p>Attendance Left <span class="text-danger">{{ $group->attendance_quantity }}</span></p>  
-                        </div>
-                        <div class="col-6">
-                            <p>Time</p>
-                        </div>
-                        <p><span class="badge bg-secondary">{{ $group->type }}</span></p>
-                        <div class="col-md-6 pt-2">
-                            <a class="btn btn-outline-primary" href="{{route('professional.event.edit',['id'=>$group->id])}}">View Event</a>  
-                            <a class="btn btn-outline-success ms-2" href="{{route('professional.event.schedule.view',['id'=>$group->id])}}">Edit Event</a>  
-                        </div>
-                        <div class="col-md-6 pt-2">
-                            <a class="btn btn-outline-danger float-end" href="{{route('professional.event.delete',['id'=>$group->id])}}">Delete Event</a>
+
+            @php
+                $groupCount++;
+            @endphp
+
+            @endif
+
+            @else
+
+            <div class="row">
+                <!-- image (event poster)-->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <img src="{{ asset('event/')}}/{{ $event->image }}" alt="" class="img-fluid rounded card-img-top">
+                </div>
+                <!-- event's content -->
+                <div class="col-md-8 d-flex align-items-stretch">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- event id -->
+                                <input type="hidden" id="id" name="id" value="{{ $event->id }}">
+                                <!-- event title & description -->
+                                <div class="col-md-12">
+                                    <h3 class="pt-3 pb-2">{{ $event->title }}</h3>
+                                    {!!$event->description!!}
+                                </div>
+                                <!-- price -->
+                                <div class="col-md-6">
+                                    <p>Price <span class="text-primary">RM {{ $event->amount }}.00</span></p>
+                                    <p>Attendance Quantity <span class="text-success">{{ $event->attendance_quantity }}</span></p>  
+                                    <p>Attendance Left <span class="text-danger">{{ $event->attendance_quantity }}</span></p>    
+                                </div>
+                                <!-- schedule -->
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p>Time: </p> 
+                                        </div>
+                                        <div class="col-md-10">
+                                            @foreach( $schedules as $schedule)
+                                            @if($event->id == $schedule->event_id)
+                                            <p>{{ $schedule->start_datetime }} to {{ $schedule->end_datetime}}</p>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>  
+                                <!-- event button -->  
+                                <div class="col-md-8 pb-3 position-absolute bottom-0 d-grid">
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="{{route('professional.event.edit',['id'=>$event->id])}}">Edit</a>  
+                                        <a class="btn btn-outline-primary" href="{{route('professional.event.schedule.view',['id'=>$event->id])}}">Schedule</a>  
+                                    </div>
+                                </div>
+                                <div class="col-md-4 pb-3 position-absolute bottom-0 end-0 d-grid">
+                                    <a class="btn btn-danger float-end" href="{{route('professional.event.delete',['id'=>$event->id])}}">Delete</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            @endif
+
             @endforeach
+
+            @if($groupCount == 0)
+            <div class="row mt-md-5 mb-md-3">
+                <div class="col-md-6">
+                    <h5 class="fw-bold ps-1">My Group Counselling</h5>
+                </div>
+                <div class="col-md-2 offset-md-4 d-grid">
+                    <a class="btn btn-dark" href="{{route('professional.event.add',['type'=>'group'])}}">+ Event</a>
+                </div>                
+            </div>
+            @endif
         </div>
     </div>   
 </div>
 @endsection
 
 
+
+<!-- include libraries(jQuery, bootstrap) -->
+<script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
-    var app = {{ Js::from($schedules) }};
+    var app = {{ Js::from($events) }};
     console.log(app);
+
 </script>

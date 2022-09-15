@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Auth;
 
 class LoginController extends Controller
 {
@@ -38,7 +39,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('guest:professional')->except('logout');
+        $this->middleware('guest:professional')->except('professionalLogout');
     }
 
     public function showProfessionalLoginForm()
@@ -58,6 +59,14 @@ class LoginController extends Controller
             return redirect()->intended('/professional');
         }
         return back()->withInput($request->only('email', 'remember'));
+    }
+
+    public function professionalLogout(Request $request)
+    {
+        Auth::guard('professional')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('professional.login');
     }
 }
 

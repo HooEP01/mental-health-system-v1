@@ -2,12 +2,13 @@
 @section('content')
 <div class="container pt-3">
     <div class="row">
+        @foreach($events as $event)
         <!-- title -->
         <div class="col-md-10 p-2">
-            @if($type == 'individual')
-            <h5 class="fw-bold">Individual Event</h5>
+            @if($event->type == 'Individual Counselling')
+            <h5 class="fw-bold">Edit Individual Event</h5>
             @else
-            <h5 class="fw-bold">Group Event</h5>
+            <h5 class="fw-bold">Edit Group Event</h5>
             @endif
         </div>
         <!-- back button -->
@@ -19,15 +20,18 @@
             <div class="card">
                 <div class="card-body">
                     <!-- form -->
-                    <form action="{{route('professional.event.create')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
+                    <form action="{{route('professional.event.update')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
                     @CSRF
-                        <input type="hidden" id="professional_id" name="professional_id" value="{{ Auth::id() }}">        
+                        <input type="hidden" id="event_id" name="event_id" value="{{$event->id}}"> 
+                        <input type="hidden" id="professional_id" name="professional_id" value="{{ Auth::id() }}">
+                               
                         <div class="row">
-                            @if($type == 'individual')
+                            @if($event->type == 'Individual Counselling')
                             <!-- type -->
-                            <input type="hidden" id="type" name="type" value="Individual Counselling">  
+                            <input type="hidden" id="type" name="type" value="{{$event->type}}">  
                             <!-- Attendance Quantity -->
                             <input type="hidden" id="attendance_quantity" name="attendance_quantity" value="1">
+
                             @else
                             <!-- type -->
                             <div class="col-4 p-2">
@@ -57,7 +61,7 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                    <input type="number" class="form-control" id="amount" name="amount" placeholder="" required>
+                                    <input type="number" class="form-control" id="amount" name="amount" placeholder="" value="{{$event->amount}}" required>
                                 </div>
                             </div>  
                             <!-- Image -->
@@ -75,7 +79,7 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="" required>
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="" value="{{$event->title}}" required>
                                 </div>
                             </div>  
                             <!-- Summary -->
@@ -84,13 +88,13 @@
                             </div>
                             <div class="col-8 p-2">
                                 <div class="form-group">
-                                    <textarea class="form-control summernote" id="description" name="description" rows="5" required></textarea>
+                                    <textarea class="form-control summernote" id="description" name="description" rows="5" required value="{{$event->description}}"></textarea>
                                 </div>
                             </div>   
                             <!-- submit button -->
                             <div class="col-4 p-2"></div>
                             <div class="col-8 p-2">
-                                <button type="submit" class="btn btn-primary form-control">Create</button>
+                                <button type="submit" class="btn btn-primary form-control">Update</button>
                             </div>
                         </div>    
                     </form>
@@ -98,9 +102,11 @@
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
 </div>
 @endsection
+
 
 
 

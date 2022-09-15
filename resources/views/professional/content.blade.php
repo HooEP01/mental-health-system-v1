@@ -4,11 +4,11 @@
     <div class="container">
         <!-- header nav -->
         <ul class="nav">
-            <!-- Event page -->
+            <!-- My Content page -->
             <li class="nav-item">
                 <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.content.view')}}">My Content</a>
             </li>
-            <!-- home page -->
+            <!-- Community Content page -->
             <li class="nav-item">
                 <a class="nav-link" href="{{route('professional.content.community.view')}}">Community Content</a>
             </li>
@@ -24,12 +24,14 @@
                 </div>
                 <div class="col-md-2 p-2"></div>
                 <div class="col-md-4 p-1 d-grid">
+                    <!-- search function -->
                     <form action="{{route('professional.content.search')}}" method="POST">
                         @csrf
                         <div><input type="search" id="name" name="name" class="form-control " placeholder="Search"></div>
                     </form>
                 </div>
                 <div class="col-md-4 p-1 d-grid">
+                    <!-- filter function -->
                     <form action="{{route('professional.content.filter')}}" method="POST">
                         @csrf
                         <div class="row">
@@ -63,7 +65,10 @@
         <div class="col-md-4 p-2">
             <div class="card">
                 <!-- image -->
-                <img src="{{ asset('content/')}}/{{ $content->image }}" alt="" class="img-fluid rounded card-img-top">
+                @php
+                    $image = '1280x720.png';
+                @endphp
+                <img src="{{ asset('content/')}}/{{ $content->image }}" alt="{{ asset('content/')}}/{{$image}}" class="img-fluid rounded card-img-top">
                 <div class="card-body">
                     <!-- content id -->
                     <input type="hidden" id="id" name="id" value="{{ $content->id }}">
@@ -110,4 +115,7 @@
             }
         })
     }
+
+    let app = {{ Js::from($contents) }};
+    console.log(app);
 </script>

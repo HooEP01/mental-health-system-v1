@@ -61,7 +61,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('professional.profile.view') }}">
+                                    <a class="dropdown-item" href="{{ route('user.profile.view') }}">
                                         Profile
                                     </a>
 
@@ -85,25 +85,25 @@
 
         <div class="cointainer-fluid bg-white">
             <div class="container">
-                <!-- header title 
-             <h1>Welcome User</h1>
-            -->
-               
+                <!-- header title -->
+                <h1>Welcome Back, User</h1>
 
                 <!-- header nav -->
                 <ul class="nav">
 
-                    <!-- Event page -->
-                    <li class="nav-item">
-                        <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.event.view')}}">Event</a>
-                    </li>
                     <!-- home page -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('home')}}">Dashboard</a>
+                        <a class="nav-link active ps-0" href="{{route('home')}}">Dashboard</a>
                     </li>
+
+                    <!-- Event page -->
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('user.event.view')}}">Event</a>
+                    </li>
+                    
                     <!-- content page -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('professional.content.view')}}">Content</a>
+                        <a class="nav-link" href="{{route('user.event.view')}}">Content</a>
                     </li>
                     
                     <li class="nav-item">

@@ -40,8 +40,8 @@ Auth::routes();
 | Professional's
 | Authentication and Authorization
 */
-Route::get('/login/professional', [LoginController::class, 'showProfessionalLoginForm']);
-Route::get('/register/professional', [RegisterController::class, 'showProfessionalRegisterForm']);
+Route::get('/login/professional', [LoginController::class, 'showProfessionalLoginForm'])->name('professional.login');
+Route::get('/register/professional', [RegisterController::class, 'showProfessionalRegisterForm'])->name('professional.register');
 Route::post('/login/professional', [LoginController::class,'professionalLogin']);
 Route::post('/register/professional', [RegisterController::class,'createProfessional']);
 
@@ -142,7 +142,10 @@ Route::group(['middleware' => 'auth:professional'], function () {
     */
     Route::controller(AppointmentController::class)->group(function () {
         Route::get('/professional/appointment', 'view')->name('professional.appointment.view');
+        Route::get('/professional/appointment/filter/{status}', 'filterStatus')->name('professional.appointment.filter.status');
+        Route::get('/professional/appointment/complete/{id}', 'complete')->name('professional.appointment.complete');
         Route::get('/professional/appointment/approve/{id}', 'approve')->name('professional.appointment.approve');
+        Route::get('/professional/appointment/cancel/{id}', 'cancel')->name('professional.appointment.cancel');
     });
 
     /*
@@ -169,8 +172,8 @@ Route::group(['middleware' => 'auth:professional'], function () {
     | Profile page
     */
     Route::controller(UserController::class)->group(function () {
-        Route::get('/profile', 'view')->name('profile.view');
-        Route::get('/profile/update', 'update')->name('profile.update');
+        Route::get('/user/profile', 'view')->name('user.profile.view');
+        Route::post('/user/profile/update', 'update')->name('user.profile.update');
     });
     
     /*
@@ -181,16 +184,17 @@ Route::group(['middleware' => 'auth:professional'], function () {
     | Event page
     */
     Route::controller(EventController::class)->group(function () {
-        Route::get('/event', 'userView')->name('event.view');
+        Route::get('/user/event', 'userView')->name('user.event.view');
     });
 
     /*
     | Appointment page
     */
     Route::controller(AppointmentController::class)->group(function () {
-        Route::get('/appointment/add/{id}', 'userAdd')->name('appointment.add');
-        Route::post('/appointment/create', 'userCreate')->name('appointment.create');
-        Route::get('/appointment/cancel/{id}', 'userDelete')->name('appointment.delete');
+        Route::get('/user/appointment/add/{id}', 'userAdd')->name('user.appointment.add');
+        Route::post('/user/appointment/create', 'userCreate')->name('user.appointment.create');
+        Route::get('/user/appointment/view', 'userView')->name('user.appointment.view');
+        Route::get('/user/appointment/cancel/{id}', 'userDelete')->name('user.appointment.delete');
     });
 
     /*
@@ -204,9 +208,9 @@ Route::group(['middleware' => 'auth:professional'], function () {
     /*
     | Payment page
     */
-    Route::controller(AppointmentController::class)->group(function () {
-        Route::get('/appointment/payment/add/{id}', 'add')->name('appointment.add');
-        Route::post('/appointment/payment/create', 'create')->name('appointment.create');
+    Route::controller(PaymentController::class)->group(function () {
+        Route::get('/user/appointment/payment/add/{id}', 'userAdd')->name('user.payment.add');
+        Route::post('/user/appointment/payment/create', 'userCreate')->name('user.payment.create');
     });
 
 
@@ -216,3 +220,5 @@ Route::group(['middleware' => 'auth:professional'], function () {
 | Applicable for (User, Professional & Administrator)
 */
 Route::get('logout', [LoginController::class,'logout']);
+Route::post('/professional/login', [LoginController::class,'professionalLogout'])->name('professional.logout');
+

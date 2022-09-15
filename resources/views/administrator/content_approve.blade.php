@@ -6,17 +6,17 @@
         <ul class="nav">
             <!-- Content approve page -->
             <li class="nav-item">
-                <a class="nav-link active ps-0" aria-current="page" href="{{route('administrator.content.view')}}">Content</a>
+                <a class="nav-link active ps-0 link-danger" aria-current="page" href="{{route('administrator.content.view')}}">Approve Content</a>
             </li>
-            <!-- Event approve page 
+            <!-- Event approve page -->
             <li class="nav-item">
-                <a class="nav-link" href="{{route('administrator.event.view')}}">Event</a>
+                <a class="nav-link link-danger" href="">Approve Event</a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="{{route('administrator.user.view')}}">User</a>
+                <a class="nav-link link-danger" href="">View User</a>
             </li>
-            -->
+
         </ul>
     </div>
 </div>
@@ -29,7 +29,7 @@
             
         </div>
         <div class="col-md-2 p-2 d-grid">
-            <a class="btn btn-outline-dark" href="{{route('professional.event.view')}}">< Back</a>
+            
         </div>
         <div class="col-md-12 p-2">
             <div class="card">
@@ -38,13 +38,16 @@
                     <thead>
                         <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Event</th>
-                        <th scope="col">Start</th>
-                        <th scope="col">End</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Reason</th>
-                        <th scope="col"></th>
+                        <th scope="col">type</th>
+                        <th scope="col">category</th>
+                        <th scope="col">image</th>
+                        <th scope="col">title</th>
+                        <th scope="col">summary</th>
+                        <th scope="col">status</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col">Updated At</th>
+                        <th scope="col">View</th>
+                        <th scope="col">View</th>
                         </tr>
                     </thead>
                     <tbody class="list" id="list">                   

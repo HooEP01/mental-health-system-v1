@@ -1,14 +1,22 @@
 @extends('layouts.user')
 @section('content')
-<div class="container pt-3">
+<div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <!-- title -->
+        <div class="col-md-10 p-2">
+            <h5 class="fw-bold">Make Appointment</h5>
+        </div>
+        <!-- back button -->
+        <div class="col-md-2 p-2 d-grid">
+            <a class="btn btn-dark" href="{{route('user.event.view')}}">< Back</a>
+        </div>
+        
+        <div class="col-md-12 p-2">
             <div class="card">
                 <div class="card-body">
-                    <h4>Appointment</h4>
                     @foreach($events as $event)
                         <!-- form -->
-                    <form action="{{route('appointment.create')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
+                    <form action="{{route('user.appointment.create')}}" method="POST" enctype="multipart/form-data" class="validate-form mt-2" novalidate="novalidate">
                     @CSRF
                         <!-- Event id -->
                         <input type="hidden" id="event_id" name="event_id" value="{{ $event->id }}">
@@ -16,26 +24,22 @@
                         <input type="hidden" id="user_id" name="user_id" value="{{ Auth::id() }}">
                         
                         <div class="row">
-                            <div class="col-12 p-2"></div>
-
                             <!-- Title -->
-                            <div class="col-4 p-2">
+                            <div class="col-md-2 p-2">
                                 <label for="reason" class="form-label">Reason</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <div class="form-group">
                                 <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
                                 </div>
                             </div>    
                            
                             <!-- Start time -->
-
-                            
-                            <div class="col-md-4 p-2">
+                            <div class="col-md-2 p-2">
                                 <label for="start_datetime" class="form-label">Start Time</label>
                             </div>
                             
-                            <div class="col-md-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <select class="start_datetime form-select" id="start_datetime" name="start_datetime" onchange="endDateTime()" required>
                                 </select>
                             </div>
@@ -49,42 +53,42 @@
 
 
                             <!-- End time -->
-                            <div class="col-4 p-2">
+                            <div class="col-md-2 p-2">
                                 <label for="end_datetime" class="form-label">End Time</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <div class="form-group">
                                     <input type="text" class="form-control end_datetime" id="end_datetime" name="end_datetime" required readonly>
                                 </div>
                             </div>  
                             
                             <!-- Fee -->
-                            <div class="col-4 p-2">
+                            <div class="col-md-2 p-2">
                                 <label for="amount" class="form-label">Price (RM)</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <div class="form-group">
                                     <input type="text"  class="form-control" id="amount" name="amount" rows="4" required value="{{ $event->amount }}.00" readonly>
                                 </div>
                             </div>  
 
                             <!-- Fee -->
-                            <div class="col-4 p-2">
+                            <div class="col-md-2 p-2">
                                 <label for="attendance_quantity" class="form-label">Attendance Left</label>
                             </div>
-                            <div class="col-8 p-2">
+                            <div class="col-md-10 p-2">
                                 <div class="form-group">
                                     <input type="text"  class="form-control" id="attendance_quantity" name="attendance_quantity" rows="4" required value="{{ $event->attendance_quantity }}" readonly>
                                 </div>
                             </div>  
 
                             <!-- Back Btn -->
-                            <div class="col-4 p-2">
-                                <a class="btn border-dark form-control" href="{{ route('professional.home') }}">Back</a>
+                            <div class="col-md-2 p-2">
+                                
                             </div>
                             <!-- Save Btn -->
-                            <div class="col-8 p-2">
-                                <button type="submit" class="btn btn-outline-primary form-control">Save Change</button>
+                            <div class="col-md-10 p-2">
+                                <button type="submit" class="btn btn-primary form-control">Save Change</button>
                             <div>
                                 
                         </div>
@@ -105,7 +109,6 @@
 <script>
     $(document).ready(
         function(){
-
             let list = document.getElementById('start_datetime');
             let htmlStr = ''
             sortedAsc.forEach(function (item){
@@ -155,6 +158,7 @@
         let startTime = startDatetime.getTime();
         let endTime = endDatetime.getTime();
         let periodical = data[i]['periodical'];
+        console.log(data[i]);
         let differenceDate = Math.ceil((endTime - startTime) / (1000 * 3600 * 24));
         let step = 1;
         if(periodical === "Daily"){

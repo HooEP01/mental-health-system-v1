@@ -26,7 +26,7 @@ class ProfessionalController extends Controller
         $imageName='';
         if($r->file('image')!= ''){
             $image=$r->file('image');
-            $image->move('professional',$image->getClientOriginalName());
+            $image->move('profile',$image->getClientOriginalName());
             $imageName=$image->getClientOriginalName();
         }
 
@@ -34,7 +34,7 @@ class ProfessionalController extends Controller
         $professionals->title=$r->title;
         $professionals->bio=$r->bio;
         $professionals->linkedln=$r->linkedln;
-        $professionals->image=$r->imageName;
+        $professionals->image=$imageName;
         $professionals->save();
         
         return redirect()->route('professional.profile.view');

@@ -65,13 +65,13 @@
                                         Profile
                                     </a>
 
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <a class="dropdown-item" href="{{ route('professional.logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('professional.logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -86,22 +86,21 @@
         <div class="cointainer-fluid bg-white">
             <div class="container">
                 <!-- header title -->
-                <h1>Welcome Back Professional</h1>
+                <h1>Welcome Back, Professional</h1>
 
                 <!-- header nav -->
                 <ul class="nav">
-
+                    <!-- home page -->
+                    <li class="nav-item">
+                        <a class="nav-link active ps-0" href="{{route('professional.home')}}">Dashboard</a>
+                    </li>
                     <!-- Event page -->
                     <li class="nav-item">
-                        <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.event.view')}}">Event</a>
+                        <a class="nav-link" aria-current="page" href="{{route('professional.event.view')}}">Event</a>
                     </li>
                     <!-- Appointment page -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('professional.appointment.view')}}">Appointment</a>
-                    </li>
-                    <!-- home page -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('professional.home')}}">Dashboard</a>
                     </li>
                     <!-- content page -->
                     <li class="nav-item">

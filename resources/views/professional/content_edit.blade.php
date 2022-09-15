@@ -1,20 +1,5 @@
 @extends('layouts.auth')
 @section('content')
-<div class="cointainer-fluid bg-white">
-    <div class="container">
-        <!-- header nav -->
-        <ul class="nav">
-            <!-- Event page -->
-            <li class="nav-item">
-                <a class="nav-link active ps-0" aria-current="page" href="{{route('professional.content.view')}}">My Content</a>
-            </li>
-            <!-- home page -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('professional.content.community.view')}}">Community Content</a>
-            </li>
-        </ul>
-    </div>
-</div>
 <div class="container">
     <div class="row pt-3">
         <div class="col-md-10 p-2">
